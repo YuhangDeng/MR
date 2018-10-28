@@ -1,0 +1,63 @@
+def permute(a, lo):
+    hi = len(a)
+    if (lo == hi):
+        blist = [a[i:i + 4] for i in range(0, len(a), 4)]
+        if sum(blist[0]) != 34 or sum(blist[1]) != 34 or sum(blist[2]) != 34 or sum(blist[3]) != 34:
+            return
+        else:
+            correctness = check_square(blist)
+            if correctness == True:
+                print(a)
+            else:
+                return
+    else:
+        for i in range (lo, hi):
+            a[lo], a[i] = a[i], a[lo]
+            permute(a, lo+1)
+            a[lo], a[i] = a[i], a[lo]
+
+def check_square(magic_square):
+    #Form a list that will contain the sums of all the rows, columns and diagonols and calculate the supposed sum of a magic square
+    sums = []
+    supposeSum = ((4 ** 2 + 1) * 4) / 2
+
+    # Form the 2D list for the column
+    column = []
+    for i in range(0, 4):
+        for j in (magic_square):
+            column.append(j[i])
+    columns = [column[x:x + 4] for x in range(0, len(column), 4)]
+
+    # Form the 2D list for the diagonol
+    firstDia = []
+    reverseMagic = []
+    secondDia = []
+    for u in range(0, 4):
+        firstDia.append(magic_square[u][u])
+    for i in magic_square:
+        reverseMagic.append(i[::-1])
+    for u in range(0, 4):
+        secondDia.append(reverseMagic[u][u])
+
+    # Add all rows, columns and diagonols' sum to the "sums" list
+    for u in magic_square:
+        sums.append(sum(u))
+    for u in columns:
+        sums.append(sum(u))
+    sums.append(sum(firstDia))
+    sums.append(sum(secondDia))
+
+    # Check the sums are all the same by checking if there is any number in the list "sums" that is not equal to the supposed sum
+    correctness = True
+    for t in sums:
+        if t != supposeSum:
+            correctness = False
+            break
+    return correctness
+
+def main():
+    alist = []
+    for i in range(1, 17):
+        alist.append(i)
+    permute(alist, 0)
+main()
